@@ -144,6 +144,14 @@
 	(right (kronecker-expt +I+ i)))
     (kronecker-multiply left (kronecker-multiply U right))))
 
+;; We can now define the operator to apply single qubit
+;; gates:
+
+(defun %apply-1Q-gate (state U q)
+  (apply-operator (lift U q (dimension-qubits (length state)))
+		  state))
+
+
 ;; To deal with multi-qubit gates with non-adjacent qubits,
 ;; we first SWAP the non-adjacent qubits till we have them
 ;; adjacent, then apply the previous method, then perform
@@ -176,7 +184,7 @@
 
 ;; Next we convert these transpositions to adjacent transposition indexes.
 
-(defun transposition-to-adjacent-transpositions (transpositions)
+(defun transpositions-to-adjacent-transpositions (transpositions)
   (flet ((expand-cons (c)
 	   (if (= 1 (- (cdr c) (car c)))
 	       (list (car c))
